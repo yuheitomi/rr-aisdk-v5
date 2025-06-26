@@ -9,9 +9,15 @@
     "typecheck": "react-router typegen && tsc"
   },
   "dependencies": {
+    "@ai-sdk/google": "2.0.0-beta.2",
+    "@ai-sdk/openai": "2.0.0-beta.1",
+    "@ai-sdk/react": "2.0.0-beta.1",
     "@react-router/node": "^7.5.3",
     "@react-router/serve": "^7.5.3",
+    "ai": "5.0.0-beta.1",
+    "daisyui": "^5.0.43",
     "isbot": "^5.1.27",
+    "lucide-react": "^0.523.0",
     "react": "^19.1.0",
     "react-dom": "^19.1.0",
     "react-router": "^7.5.3"
