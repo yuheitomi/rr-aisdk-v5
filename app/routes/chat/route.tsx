@@ -2,9 +2,16 @@ import { useChat } from "@ai-sdk/react";
 import { DefaultChatTransport, type UIMessage } from "ai";
 import { Send } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
+import { ModelSelector } from "~/components/model-selector";
+import { Button } from "~/components/ui/button";
+import { Card, CardContent, CardHeader, CardTitle } from "~/components/ui/card";
+import { Input } from "~/components/ui/input";
+import { Spinner } from "~/components/ui/spinner";
+import { defaultModelId } from "~/lib/model-list";
 
 export default function ChatRoute() {
   const [input, setInput] = useState("");
+  const [selectedModelId, setSelectedModelId] = useState(defaultModelId);
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
 
@@ -35,53 +42,53 @@ export default function ChatRoute() {
 
   const handleSendMessage = (e: React.FormEvent) => {
     e.preventDefault();
-    sendMessage({ text: input });
+    sendMessage({ text: input }, { body: { modelId: selectedModelId } });
     setInput("");
   };
 
   return (
-    <div className="h-screen bg-base-200 p-4 flex flex-col">
-      <div className="flex-1 max-w-6xl mx-auto w-full flex flex-col min-h-0">
-        <div className="card bg-base-100 shadow-xl flex-1 flex flex-col min-h-0">
-          <div className="card-body flex-1 flex flex-col min-h-0">
-            <h2 className="card-title justify-center mb-6 flex-shrink-0">AI Chat</h2>
+    <div className="flex h-screen flex-col bg-gray-50 p-4">
+      <div className="mx-auto flex min-h-0 w-full max-w-4xl flex-1 flex-col">
+        <Card className="flex min-h-0 flex-1 flex-col border-0 bg-white shadow-sm">
+          <CardHeader className="flex-shrink-0 pb-4">
+            <CardTitle className="text-center font-semibold text-xl">AI Chat</CardTitle>
+          </CardHeader>
 
+          <CardContent className="flex min-h-0 flex-1 flex-col pt-0">
             {/* Messages Container */}
-            <div className="flex-1 overflow-y-auto mb-6 space-y-4 min-h-0 scrollbar-thin scrollbar-thumb-base-300 scrollbar-track-transparent max-h-full">
+            <div className="mb-6 min-h-0 flex-1 space-y-4 overflow-y-auto">
               <MessageContainer messages={messages} />
-              {isLoading && <div className="flex justify-center mb-4">Loading...</div>}
-              {/* Invisible element to scroll to */}
+              {isLoading && (
+                <div className="flex justify-center py-4">
+                  <Spinner className="h-5 w-5" />
+                </div>
+              )}
               <div ref={messagesEndRef} />
             </div>
 
             {/* Input Form */}
             <div className="flex-shrink-0">
-              <form onSubmit={handleSendMessage} className="flex gap-2">
-                <input
+              <form onSubmit={handleSendMessage} className="flex gap-3">
+                <ModelSelector
+                  selectedModelId={selectedModelId}
+                  onModelChange={setSelectedModelId}
+                />
+                <Input
                   ref={inputRef}
                   type="text"
-                  className="input input-bordered flex-1"
+                  className="flex-1"
                   placeholder="Type your message..."
                   value={input}
                   onChange={(e) => setInput(e.target.value)}
                   disabled={isLoading}
                 />
-                <button
-                  type="submit"
-                  className="btn btn-primary"
-                  disabled={isLoading || !input.trim()}
-                  aria-label="Send message"
-                >
-                  {isLoading ? (
-                    <span className="loading loading-spinner loading-sm"></span>
-                  ) : (
-                    <Send className="w-5 h-5" aria-hidden="true" />
-                  )}
-                </button>
+                <Button type="submit" disabled={isLoading || !input.trim()} className="px-3">
+                  {isLoading ? <Spinner className="h-4 w-4" /> : <Send className="h-4 w-4" />}
+                </Button>
               </form>
             </div>
-          </div>
-        </div>
+          </CardContent>
+        </Card>
       </div>
     </div>
   );
@@ -89,9 +96,9 @@ export default function ChatRoute() {
 
 function ConversationStarter() {
   return (
-    <div className="text-center text-base-content/60 mt-20">
-      <div className="text-6xl mb-4">💬</div>
-      <p>Start a conversation with AI</p>
+    <div className="mt-20 text-center text-gray-500">
+      <div className="mb-4 text-6xl">💬</div>
+      <p className="text-sm">Start a conversation with AI</p>
     </div>
   );
 }
@@ -110,31 +117,33 @@ function MessageContainer({ messages }: { messages: UIMessage[] }) {
             message.role === "user" ? "ml-auto" : "mr-auto"
           }`}
         >
-          <div className="text-sm font-medium mb-1 px-1 capitalize">
+          <div className="mb-1 px-1 font-medium text-gray-600 text-xs capitalize">
             {message.role === "user" ? "You" : "AI"}
           </div>
           <div
-            className={`p-3 rounded-md ${
-              message.role === "user" ? "bg-blue-500 text-white" : "bg-gray-200 text-gray-900"
+            className={`rounded-lg p-3 ${
+              message.role === "user"
+                ? "bg-blue-600 text-white"
+                : "border bg-gray-100 text-gray-900"
             }`}
           >
             {message.parts.map((part, i) => {
               if (part.type === "reasoning") {
                 return (
-                  <div key={`${message.id}-part-${i}`} className="whitespace-pre-wrap">
+                  <div key={`${message.id}-part-${i}`} className="whitespace-pre-wrap text-sm">
                     {part.text}
                   </div>
                 );
               }
               if (part.type === "text") {
                 return (
-                  <div key={`${message.id}-part-${i}`} className="whitespace-pre-wrap">
+                  <div key={`${message.id}-part-${i}`} className="whitespace-pre-wrap text-sm">
                     {part.text}
                   </div>
                 );
               }
               return (
-                <div key={`${message.id}-part-${i}`} className="whitespace-pre-wrap">
+                <div key={`${message.id}-part-${i}`} className="whitespace-pre-wrap text-sm">
                   {part.type === "step-start" ? "Step Start" : "Step End"}
                 </div>
               );
