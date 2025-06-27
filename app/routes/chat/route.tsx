@@ -2,15 +2,19 @@ import { useChat } from "@ai-sdk/react";
 import { DefaultChatTransport, type UIMessage } from "ai";
 import { Send } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
+import { ModelSelector } from "~/components/ModelSelector";
+import { defaultModelId } from "~/lib/model-list";
 
 export default function ChatRoute() {
   const [input, setInput] = useState("");
+  const [selectedModelId, setSelectedModelId] = useState(defaultModelId);
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
 
   const { messages, sendMessage, status } = useChat({
     transport: new DefaultChatTransport({
       api: "/api/chat",
+      body: () => ({ modelId: selectedModelId }),
     }),
     onFinish: (message) => {
       console.log(message);
@@ -57,6 +61,10 @@ export default function ChatRoute() {
             {/* Input Form */}
             <div className="flex-shrink-0">
               <form onSubmit={handleSendMessage} className="flex gap-2">
+                <ModelSelector
+                  selectedModelId={selectedModelId}
+                  onModelChange={setSelectedModelId}
+                />
                 <input
                   ref={inputRef}
                   type="text"

@@ -9,6 +9,7 @@
     "typecheck": "react-router typegen && tsc"
   },
   "dependencies": {
+    "@ai-sdk/anthropic": "2.0.0-beta.2",
     "@ai-sdk/google": "2.0.0-beta.2",
     "@ai-sdk/openai": "2.0.0-beta.1",
     "@ai-sdk/react": "2.0.0-beta.1",
