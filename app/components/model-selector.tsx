@@ -1,5 +1,4 @@
 import { ChevronDown } from "lucide-react";
-
 import { Button } from "~/components/ui/button";
 import {
   DropdownMenu,
@@ -59,10 +58,10 @@ export function ModelSelector({ selectedModelId, onModelChange }: ModelSelectorP
           <ChevronDown className="ml-2 h-4 w-4" />
         </Button>
       </DropdownMenuTrigger>
-      <DropdownMenuContent className="w-64 max-h-80 overflow-y-auto">
+      <DropdownMenuContent className="max-h-80 w-64 overflow-y-auto">
         {Object.entries(groupedModels).map(([provider, models]) => (
           <DropdownMenuGroup key={provider}>
-            <DropdownMenuLabel className="text-xs font-semibold uppercase tracking-wide">
+            <DropdownMenuLabel className="font-semibold text-xs uppercase tracking-wide">
               {getProviderLabel(provider)}
             </DropdownMenuLabel>
             {models.map((model) => (

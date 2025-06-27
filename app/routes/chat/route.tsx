@@ -48,20 +48,20 @@ export default function ChatRoute() {
   };
 
   return (
-    <div className="h-screen bg-gray-50 p-4 flex flex-col">
-      <div className="flex-1 max-w-4xl mx-auto w-full flex flex-col min-h-0">
-        <Card className="flex-1 flex flex-col min-h-0 shadow-sm border-0 bg-white">
+    <div className="flex h-screen flex-col bg-gray-50 p-4">
+      <div className="mx-auto flex min-h-0 w-full max-w-4xl flex-1 flex-col">
+        <Card className="flex min-h-0 flex-1 flex-col border-0 bg-white shadow-sm">
           <CardHeader className="flex-shrink-0 pb-4">
-            <CardTitle className="text-center text-xl font-semibold">AI Chat</CardTitle>
+            <CardTitle className="text-center font-semibold text-xl">AI Chat</CardTitle>
           </CardHeader>
 
-          <CardContent className="flex-1 flex flex-col min-h-0 pt-0">
+          <CardContent className="flex min-h-0 flex-1 flex-col pt-0">
             {/* Messages Container */}
-            <div className="flex-1 overflow-y-auto mb-6 space-y-4 min-h-0">
+            <div className="mb-6 min-h-0 flex-1 space-y-4 overflow-y-auto">
               <MessageContainer messages={messages} />
               {isLoading && (
                 <div className="flex justify-center py-4">
-                  <Spinner className="w-5 h-5" />
+                  <Spinner className="h-5 w-5" />
                 </div>
               )}
               <div ref={messagesEndRef} />
@@ -84,7 +84,7 @@ export default function ChatRoute() {
                   disabled={isLoading}
                 />
                 <Button type="submit" disabled={isLoading || !input.trim()} className="px-3">
-                  {isLoading ? <Spinner className="w-4 h-4" /> : <Send className="w-4 h-4" />}
+                  {isLoading ? <Spinner className="h-4 w-4" /> : <Send className="h-4 w-4" />}
                 </Button>
               </form>
             </div>
@@ -97,8 +97,8 @@ export default function ChatRoute() {
 
 function ConversationStarter() {
   return (
-    <div className="text-center text-gray-500 mt-20">
-      <div className="text-6xl mb-4">💬</div>
+    <div className="mt-20 text-center text-gray-500">
+      <div className="mb-4 text-6xl">💬</div>
       <p className="text-sm">Start a conversation with AI</p>
     </div>
   );
@@ -118,14 +118,14 @@ function MessageContainer({ messages }: { messages: UIMessage[] }) {
             message.role === "user" ? "ml-auto" : "mr-auto"
           }`}
         >
-          <div className="text-xs font-medium mb-1 px-1 text-gray-600 capitalize">
+          <div className="mb-1 px-1 font-medium text-gray-600 text-xs capitalize">
             {message.role === "user" ? "You" : "AI"}
           </div>
           <div
-            className={`p-3 rounded-lg ${
+            className={`rounded-lg p-3 ${
               message.role === "user"
                 ? "bg-blue-600 text-white"
-                : "bg-gray-100 text-gray-900 border"
+                : "border bg-gray-100 text-gray-900"
             }`}
           >
             {message.parts.map((part, i) => {
