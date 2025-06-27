@@ -1,5 +1,5 @@
 import { useChat } from "@ai-sdk/react";
-import { DefaultChatTransport } from "ai";
+import { DefaultChatTransport, type UIMessage } from "ai";
 import { Send } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
 
@@ -48,60 +48,7 @@ export default function ChatRoute() {
 
             {/* Messages Container */}
             <div className="flex-1 overflow-y-auto mb-6 space-y-4 min-h-0 scrollbar-thin scrollbar-thumb-base-300 scrollbar-track-transparent max-h-full">
-              {messages.length === 0 ? (
-                <div className="text-center text-base-content/60 mt-20">
-                  <div className="text-6xl mb-4">💬</div>
-                  <p>Start a conversation with AI</p>
-                </div>
-              ) : (
-                messages.map((message) => (
-                  <div
-                    key={message.id}
-                    className={`flex ${
-                      message.role === "user" ? "justify-end" : "justify-start"
-                    } mb-4`}
-                  >
-                    <div
-                      className={`max-w-md lg:max-w-xl xl:max-w-2xl ${
-                        message.role === "user" ? "ml-auto" : "mr-auto"
-                      }`}
-                    >
-                      <div className="text-sm font-medium mb-1 px-1 capitalize">
-                        {message.role === "user" ? "You" : "AI"}
-                      </div>
-                      <div
-                        className={`p-3 rounded-md ${
-                          message.role === "user"
-                            ? "bg-blue-500 text-white"
-                            : "bg-gray-200 text-gray-900"
-                        }`}
-                      >
-                        {message.parts.map((part, i) => {
-                          if (part.type === "reasoning") {
-                            return (
-                              <div key={`${message.id}-part-${i}`} className="whitespace-pre-wrap">
-                                {part.text}
-                              </div>
-                            );
-                          }
-                          if (part.type === "text") {
-                            return (
-                              <div key={`${message.id}-part-${i}`} className="whitespace-pre-wrap">
-                                {part.text}
-                              </div>
-                            );
-                          }
-                          return (
-                            <div key={`${message.id}-part-${i}`} className="whitespace-pre-wrap">
-                              {part.type === "step-start" ? "Step Start" : "Step End"}
-                            </div>
-                          );
-                        })}
-                      </div>
-                    </div>
-                  </div>
-                ))
-              )}
+              <MessageContainer messages={messages} />
               {isLoading && <div className="flex justify-center mb-4">Loading...</div>}
               {/* Invisible element to scroll to */}
               <div ref={messagesEndRef} />
@@ -137,5 +84,64 @@ export default function ChatRoute() {
         </div>
       </div>
     </div>
+  );
+}
+
+function ConversationStarter() {
+  return (
+    <div className="text-center text-base-content/60 mt-20">
+      <div className="text-6xl mb-4">💬</div>
+      <p>Start a conversation with AI</p>
+    </div>
+  );
+}
+
+function MessageContainer({ messages }: { messages: UIMessage[] }) {
+  return messages.length === 0 ? (
+    <ConversationStarter />
+  ) : (
+    messages.map((message) => (
+      <div
+        key={message.id}
+        className={`flex ${message.role === "user" ? "justify-end" : "justify-start"} mb-4`}
+      >
+        <div
+          className={`max-w-md lg:max-w-xl xl:max-w-2xl ${
+            message.role === "user" ? "ml-auto" : "mr-auto"
+          }`}
+        >
+          <div className="text-sm font-medium mb-1 px-1 capitalize">
+            {message.role === "user" ? "You" : "AI"}
+          </div>
+          <div
+            className={`p-3 rounded-md ${
+              message.role === "user" ? "bg-blue-500 text-white" : "bg-gray-200 text-gray-900"
+            }`}
+          >
+            {message.parts.map((part, i) => {
+              if (part.type === "reasoning") {
+                return (
+                  <div key={`${message.id}-part-${i}`} className="whitespace-pre-wrap">
+                    {part.text}
+                  </div>
+                );
+              }
+              if (part.type === "text") {
+                return (
+                  <div key={`${message.id}-part-${i}`} className="whitespace-pre-wrap">
+                    {part.text}
+                  </div>
+                );
+              }
+              return (
+                <div key={`${message.id}-part-${i}`} className="whitespace-pre-wrap">
+                  {part.type === "step-start" ? "Step Start" : "Step End"}
+                </div>
+              );
+            })}
+          </div>
+        </div>
+      </div>
+    ))
   );
 }
