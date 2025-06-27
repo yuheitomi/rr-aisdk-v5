@@ -18,7 +18,6 @@ export default function ChatRoute() {
   const { messages, sendMessage, status } = useChat({
     transport: new DefaultChatTransport({
       api: "/api/chat",
-      body: () => ({ modelId: selectedModelId }),
     }),
     onFinish: (message) => {
       console.log(message);
@@ -43,7 +42,7 @@ export default function ChatRoute() {
 
   const handleSendMessage = (e: React.FormEvent) => {
     e.preventDefault();
-    sendMessage({ text: input });
+    sendMessage({ text: input }, { body: { modelId: selectedModelId } });
     setInput("");
   };
 

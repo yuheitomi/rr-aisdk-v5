@@ -7,6 +7,7 @@ import type { Route } from "./+types/chat";
 
 export async function action({ request }: Route.ActionArgs) {
   const { messages, modelId }: { messages: UIMessage[]; modelId?: string } = await request.json();
+  console.log(`/api/chat called with modelId: ${modelId}`);
 
   const selectedModelId = modelId || defaultModelId;
   const modelConfig = modelList.find((model) => model.id === selectedModelId);
