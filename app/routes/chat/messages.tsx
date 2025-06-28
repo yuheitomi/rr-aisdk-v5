@@ -51,12 +51,16 @@ UserMessageText.displayName = "UserMessageText";
 
 const AIMessageText = memo(({ message }: { message: UIMessage }) => {
   return (
-    <>
+    <div className="flex flex-col gap-1">
       {message.parts.map((part, i) => {
         switch (part.type) {
           case "reasoning":
             return (
-              <div key={`${message.id}-part-${i}`} className="whitespace-pre-wrap text-sm">
+              <div
+                key={`${message.id}-part-${i}-type`}
+                className="flex flex-col gap-1 whitespace-pre-wrap font-mono text-sm"
+              >
+                <span className="font-mono text-stone-600 text-xs">{part.type}</span>
                 {part.text}
               </div>
             );
@@ -64,29 +68,35 @@ const AIMessageText = memo(({ message }: { message: UIMessage }) => {
             return (
               <div
                 key={`${message.id}-part-${i}`}
-                className="whitespace-pre-wrap font-mono text-sm"
+                className="flex flex-col gap-1 whitespace-pre-wrap font-mono text-sm"
               >
+                <span className="font-mono text-stone-600 text-xs">{part.type}</span>
                 {part.text}
               </div>
             );
-          case "step-start":
+          case "tool-currentTime":
             return (
               <div
                 key={`${message.id}-part-${i}`}
-                className="whitespace-pre-wrap font-mono text-gray-500 text-xs"
+                className="flex flex-col gap-1 whitespace-pre-wrap font-mono text-sm"
               >
-                Step Start
+                <span className="font-mono text-stone-600 text-xs">{part.type}</span>
+                Getting current time...
               </div>
             );
           default:
             return (
-              <div key={`${message.id}-part-${i}`} className="whitespace-pre-wrap text-sm">
-                {part.type}
+              <div
+                key={`${message.id}-part-${i}`}
+                className="flex flex-col gap-1 whitespace-pre-wrap font-mono text-sm"
+              >
+                <span className="font-mono text-stone-600 text-xs">{part.type}</span>
+                {""}
               </div>
             );
         }
       })}
-    </>
+    </div>
   );
 });
 
