@@ -1,19 +1,16 @@
 import { useChat } from "@ai-sdk/react";
-import { DefaultChatTransport, type UIMessage } from "ai";
-import { Send } from "lucide-react";
-import { memo, useEffect, useRef, useState } from "react";
+import { DefaultChatTransport } from "ai";
+import { ArrowUp } from "lucide-react";
+import { useEffect, useRef, useState } from "react";
 import { ModelSelector } from "~/components/model-selector";
 import { Button } from "~/components/ui/button";
-
-import { Input } from "~/components/ui/input";
 import { Spinner } from "~/components/ui/spinner";
+import { Textarea } from "~/components/ui/textarea";
 import { defaultModelId } from "~/lib/model-list";
+import { MessageContainer } from "./messages";
 
 export default function ChatRoute() {
-  const [input, setInput] = useState("");
-  const [selectedModelId, setSelectedModelId] = useState(defaultModelId);
   const messagesEndRef = useRef<HTMLDivElement>(null);
-  const inputRef = useRef<HTMLInputElement>(null);
 
   const { messages, sendMessage, status } = useChat({
     transport: new DefaultChatTransport({
@@ -33,23 +30,10 @@ export default function ChatRoute() {
     }
   }, [messages]);
 
-  // Keep focus on input when streaming stops
-  useEffect(() => {
-    if (status !== "streaming") {
-      inputRef.current?.focus();
-    }
-  }, [status]);
-
-  const handleSendMessage = (e: React.FormEvent) => {
-    e.preventDefault();
-    sendMessage({ text: input }, { body: { modelId: selectedModelId } });
-    setInput("");
-  };
-
   return (
     <div className="flex h-screen flex-col bg-gray-50">
       {/* Messages Container - Full screen with bottom padding for input */}
-      <div className="flex-1 overflow-y-auto px-4 pt-4 pb-32">
+      <div className="flex-1 overflow-y-auto px-4 pt-4 pb-40">
         <div className="mx-auto max-w-4xl space-y-4">
           <MessageContainer messages={messages} />
 
@@ -66,111 +50,74 @@ export default function ChatRoute() {
       {/* Fixed Input Form at Bottom */}
       <div className="fixed right-0 bottom-0 left-0 border-gray-200 border-t bg-gray-50 p-4">
         <div className="mx-auto max-w-4xl">
-          <form onSubmit={handleSendMessage} className="flex gap-3">
-            <ModelSelector selectedModelId={selectedModelId} onModelChange={setSelectedModelId} />
-            <Input
-              ref={inputRef}
-              type="text"
-              className="flex-1"
-              placeholder="Type your message..."
-              value={input}
-              onChange={(e) => setInput(e.target.value)}
-              disabled={isLoading}
-            />
-            <Button type="submit" disabled={isLoading || !input.trim()} className="px-3">
-              {isLoading ? <Spinner className="h-4 w-4" /> : <Send className="h-4 w-4" />}
-            </Button>
-          </form>
+          <InputForm
+            status={status}
+            onSubmit={(message, modelId) => sendMessage({ text: message }, { body: { modelId } })}
+          />
         </div>
       </div>
     </div>
   );
 }
 
-function MessageContainer({ messages }: { messages: UIMessage[] }) {
-  return messages.map((message) => {
-    if (message.role === "user") {
-      return <UserMessage key={message.id} message={message} />;
+interface InputFormProps {
+  status: string;
+  onSubmit: (message: string, modelId: string) => void;
+}
+
+function InputForm({ status, onSubmit }: InputFormProps) {
+  const [input, setInput] = useState("");
+  const [selectedModelId, setSelectedModelId] = useState(defaultModelId);
+  const inputRef = useRef<HTMLTextAreaElement>(null);
+
+  const isLoading = status === "streaming";
+
+  // Keep focus on input when streaming stops
+  useEffect(() => {
+    if (status !== "streaming") {
+      inputRef.current?.focus();
     }
-    return <AIMessage key={message.id} message={message} />;
-  });
-}
+  }, [status]);
 
-function UserMessage({ message }: { message: UIMessage }) {
+  const handleSubmit = (e?: React.FormEvent) => {
+    e?.preventDefault();
+    if (!input.trim() || isLoading) return;
+    onSubmit(input, selectedModelId);
+    setInput("");
+  };
+
+  const handleKeyDown = (e: React.KeyboardEvent) => {
+    if (e.key === "Enter" && (e.ctrlKey || e.metaKey)) {
+      e.preventDefault();
+      handleSubmit();
+    }
+  };
+
   return (
-    <div className="mb-4 flex justify-end">
-      <div className="max-w-md lg:max-w-xl xl:max-w-2xl">
-        <div className="whitespace-pre-wrap px-3 py-1 text-sm text-stone-500">
-          <UserMessageText message={message} />
-        </div>
+    <form onSubmit={handleSubmit} className="relative">
+      <Textarea
+        ref={inputRef}
+        className="w-full pr-12 pb-12"
+        placeholder="Type your message... (Ctrl+Enter to send)"
+        value={input}
+        onChange={(e) => setInput(e.target.value)}
+        onKeyDown={handleKeyDown}
+        disabled={isLoading}
+      />
+
+      {/* Model Selector - Left Bottom Corner */}
+      <div className="absolute bottom-2 left-2">
+        <ModelSelector selectedModelId={selectedModelId} onModelChange={setSelectedModelId} />
       </div>
-    </div>
+
+      {/* Submit Button - Right Bottom Corner */}
+      <Button
+        type="submit"
+        disabled={isLoading || !input.trim()}
+        className="absolute right-2 bottom-2 h-8 w-8 rounded-full p-0"
+      >
+        {isLoading ? <Spinner className="h-4 w-4" /> : <ArrowUp className="h-4 w-4" />}
+      </Button>
+    </form>
   );
 }
-
-function AIMessage({ message }: { message: UIMessage }) {
-  return (
-    <div className="mb-4 flex justify-start">
-      <div className="max-w-[85%]">
-        <div className="px-3 py-1 text-sm text-stone-800">
-          <AIMessageText message={message} />
-        </div>
-      </div>
-    </div>
-  );
-}
-
-const UserMessageText = memo(({ message }: { message: UIMessage }) => {
-  return (
-    <>
-      {message.parts.map((part, i) => {
-        if (part.type === "text") {
-          return <span key={`${message.id}-part-${i}`}>{part.text}</span>;
-        }
-        return null;
-      })}
-    </>
-  );
-});
-
-UserMessageText.displayName = "UserMessageText";
-
-const AIMessageText = memo(({ message }: { message: UIMessage }) => {
-  return (
-    <>
-      {message.parts.map((part, i) => {
-        switch (part.type) {
-          case "reasoning":
-            return (
-              <div key={`${message.id}-part-${i}`} className="whitespace-pre-wrap text-sm">
-                {part.text}
-              </div>
-            );
-          case "text":
-            return (
-              <div
-                key={`${message.id}-part-${i}`}
-                className="whitespace-pre-wrap font-mono text-sm"
-              >
-                {part.text}
-              </div>
-            );
-          case "step-start":
-            return (
-              <div key={`${message.id}-part-${i}`} className="whitespace-pre-wrap text-sm">
-                Step Start
-              </div>
-            );
-          default:
-            return (
-              <div key={`${message.id}-part-${i}`} className="whitespace-pre-wrap text-sm">
-                {part.type}
-              </div>
-            );
-        }
-      })}
-    </>
-  );
-});
-
-AIMessageText.displayName = "AIMessageText";
