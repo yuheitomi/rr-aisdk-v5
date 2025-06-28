@@ -5,6 +5,7 @@ import { convertToModelMessages, streamText, type UIMessage } from "ai";
 import { addCORSHeaders, createCORSErrorResponse, handleCORS } from "~/lib/cors";
 import { defaultModelId, modelList } from "~/lib/model-list";
 import type { Route } from "./+types/chat";
+import { currentTimeTool } from "./tools";
 
 export async function action({ request }: Route.ActionArgs) {
   const origin = request.headers.get("origin");
@@ -28,18 +29,24 @@ export async function action({ request }: Route.ActionArgs) {
     }
 
     const modelMessages = convertToModelMessages(messages);
-    let streamResult: ReturnType<typeof streamText>;
+    const tools = {
+      currentTime: currentTimeTool,
+    };
+
+    let streamResult: ReturnType<typeof streamText<typeof tools>>;
     switch (modelConfig.provider) {
       case "openai":
         streamResult = streamText({
           model: openai(modelConfig.modelId),
           messages: modelMessages,
+          tools,
         });
         break;
       case "google":
         streamResult = streamText({
           model: google(modelConfig.modelId),
           messages: modelMessages,
+          tools,
           providerOptions: {
             thinkingConfig: {
               includeThoughts: true,

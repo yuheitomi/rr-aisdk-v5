@@ -10,6 +10,7 @@ export function ChatContainer() {
     transport: new DefaultChatTransport({
       api: "/api/chat",
     }),
+    maxSteps: 10,
     onFinish: (message) => {
       console.log(message);
     },
