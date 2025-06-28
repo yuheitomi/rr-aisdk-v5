@@ -31,21 +31,6 @@ export function ModelSelector({ selectedModelId, onModelChange }: ModelSelectorP
     return acc;
   }, {} as Record<string, ModelConfig[]>);
 
-  // Convert provider key to display name (e.g., "openai" -> "OpenAI")
-  const getProviderLabel = (provider: string) => {
-    switch (provider) {
-      case "openai":
-        return "OpenAI";
-      case "google":
-        return "Google";
-      case "anthropic":
-        return "Anthropic";
-      default:
-        // Fallback: capitalize first letter for unknown providers
-        return provider.charAt(0).toUpperCase() + provider.slice(1);
-    }
-  };
-
   const handleModelSelect = (modelId: string) => {
     onModelChange(modelId);
   };
@@ -62,7 +47,7 @@ export function ModelSelector({ selectedModelId, onModelChange }: ModelSelectorP
         {Object.entries(groupedModels).map(([provider, models]) => (
           <DropdownMenuGroup key={provider}>
             <DropdownMenuLabel className="font-semibold text-xs uppercase tracking-wide">
-              {getProviderLabel(provider)}
+              {provider}
             </DropdownMenuLabel>
             {models.map((model) => (
               <DropdownMenuItem
@@ -70,7 +55,7 @@ export function ModelSelector({ selectedModelId, onModelChange }: ModelSelectorP
                 onSelect={() => handleModelSelect(model.id)}
                 className={selectedModel.id === model.id ? "bg-accent text-accent-foreground" : ""}
               >
-                <div className="font-medium">{model.id}</div>
+                <div className="text-xs">{model.id}</div>
               </DropdownMenuItem>
             ))}
           </DropdownMenuGroup>

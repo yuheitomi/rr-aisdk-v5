@@ -1,6 +1,6 @@
 export interface ModelConfig {
   id: string;
-  provider: "openai" | "google" | "anthropic";
+  provider: string;
   modelId: string;
 }
 

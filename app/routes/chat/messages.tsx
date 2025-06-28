@@ -71,7 +71,10 @@ const AIMessageText = memo(({ message }: { message: UIMessage }) => {
             );
           case "step-start":
             return (
-              <div key={`${message.id}-part-${i}`} className="whitespace-pre-wrap text-sm">
+              <div
+                key={`${message.id}-part-${i}`}
+                className="whitespace-pre-wrap font-mono text-gray-500 text-xs"
+              >
                 Step Start
               </div>
             );

@@ -1,6 +1,6 @@
 import { useChat } from "@ai-sdk/react";
 import { DefaultChatTransport } from "ai";
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Spinner } from "~/components/ui/spinner";
 import { InputForm } from "./input-form";
 import { MessageContainer } from "./messages";
@@ -13,8 +13,13 @@ export function ChatContainer() {
     onFinish: (message) => {
       console.log(message);
     },
+    onError: (error) => {
+      setError(error.message);
+      console.error(error);
+    },
   });
 
+  const [error, setError] = useState<string | null>(null);
   const isLoading = status === "streaming";
   const messagesEndRef = useRef<HTMLDivElement>(null);
 
@@ -24,6 +29,11 @@ export function ChatContainer() {
       messagesEndRef.current.scrollIntoView({ behavior: "smooth" });
     }
   }, [messages]);
+
+  const handleSubmit = (message: string, modelId: string) => {
+    setError(null);
+    sendMessage({ text: message }, { body: { modelId } });
+  };
 
   return (
     <>
@@ -38,6 +48,8 @@ export function ChatContainer() {
               <Spinner className="h-5 w-5" />
             </div>
           )}
+          {error && <div className=" text-red-500 text-xs">{error}</div>}
+
           <div ref={messagesEndRef} />
         </div>
       </div>
@@ -45,10 +57,7 @@ export function ChatContainer() {
       {/* Fixed Input Form at Bottom */}
       <div className="fixed right-0 bottom-0 left-0 bg-gray-50 p-4">
         <div className="mx-auto max-w-3xl">
-          <InputForm
-            status={status}
-            onSubmit={(message, modelId) => sendMessage({ text: message }, { body: { modelId } })}
-          />
+          <InputForm status={status} onSubmit={handleSubmit} />
         </div>
       </div>
     </>
