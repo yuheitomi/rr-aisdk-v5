@@ -2,28 +2,27 @@ import { anthropic } from "@ai-sdk/anthropic";
 import { type GoogleGenerativeAIProviderOptions, google } from "@ai-sdk/google";
 import { openai } from "@ai-sdk/openai";
 import { convertToModelMessages, streamText, type UIMessage } from "ai";
+import { saveMessagesLog } from "~/lib/ai/utils";
 import { addCORSHeaders, createCORSErrorResponse, handleCORS } from "~/lib/cors";
 import { defaultModelId, modelList } from "~/lib/model-list";
 import type { Route } from "./+types/chat";
 import { currentTimeTool } from "./tools";
 
 export async function action({ request }: Route.ActionArgs) {
-  const origin = request.headers.get("origin");
-  console.log(`/api/chat called with origin: ${origin}`);
+  const currentTime = new Date().toLocaleString("ja-JP", { timeZone: "Asia/Tokyo" });
+  console.log(`/api/chat called at ${currentTime}`);
 
-  // Handle CORS preflight and origin validation
+  const origin = request.headers.get("origin");
   const corsResponse = handleCORS(request);
   if (corsResponse) {
     return corsResponse;
   }
 
   try {
-    const { messages, modelId }: { messages: UIMessage[]; modelId?: string } = await request.json();
-    console.log(`/api/chat called with modelId: ${modelId}`);
-
+    const { messages, modelId, id }: { messages: UIMessage[]; modelId?: string; id?: string } =
+      await request.json();
     const selectedModelId = modelId || defaultModelId;
     const modelConfig = modelList.find((model) => model.id === selectedModelId);
-
     if (!modelConfig) {
       return createCORSErrorResponse(`Model ${selectedModelId} not found`, 400, origin);
     }
@@ -58,6 +57,7 @@ export async function action({ request }: Route.ActionArgs) {
         streamResult = streamText({
           model: anthropic(modelConfig.modelId),
           messages: modelMessages,
+          tools,
         });
         break;
       default:
@@ -68,7 +68,14 @@ export async function action({ request }: Route.ActionArgs) {
         );
     }
 
-    const response = streamResult.toUIMessageStreamResponse();
+    const response = streamResult.toUIMessageStreamResponse({
+      onFinish: ({ messages: newMessages }) => {
+        // messages: list of UI messages: [{...}]
+        // responseMessage: the message sent to the client: {...}
+        const joinedMessages = [...messages, ...newMessages];
+        saveMessagesLog(joinedMessages, id || "unknown");
+      },
+    });
     return addCORSHeaders(response, origin);
   } catch (error) {
     console.error("Chat API error:", error);

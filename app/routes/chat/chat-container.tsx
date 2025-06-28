@@ -6,7 +6,7 @@ import { InputForm } from "./input-form";
 import { MessageContainer } from "./messages";
 
 export function ChatContainer() {
-  const { messages, sendMessage, status } = useChat({
+  const { messages, sendMessage, status, id } = useChat({
     transport: new DefaultChatTransport({
       api: "/api/chat",
     }),
