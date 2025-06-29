@@ -12,14 +12,14 @@ importers:
         specifier: 2.0.0-beta.2
         version: 2.0.0-beta.2(zod@3.25.67)
       '@ai-sdk/google':
+        specifier: 2.0.0-beta.3
+        version: 2.0.0-beta.3(zod@3.25.67)
+      '@ai-sdk/openai':
         specifier: 2.0.0-beta.2
         version: 2.0.0-beta.2(zod@3.25.67)
-      '@ai-sdk/openai':
-        specifier: 2.0.0-beta.1
-        version: 2.0.0-beta.1(zod@3.25.67)
       '@ai-sdk/react':
-        specifier: 2.0.0-beta.1
-        version: 2.0.0-beta.1(react@19.1.0)(zod@3.25.67)
+        specifier: 2.0.0-beta.3
+        version: 2.0.0-beta.3(react@19.1.0)(zod@3.25.67)
       '@radix-ui/react-dropdown-menu':
         specifier: ^2.1.15
         version: 2.1.15(@types/react-dom@19.1.6(@types/react@19.1.8))(@types/react@19.1.8)(react-dom@19.1.0(react@19.1.0))(react@19.1.0)
@@ -36,8 +36,8 @@ importers:
         specifier: ^1.1.2
         version: 1.1.2(@react-router/dev@7.6.3(@react-router/serve@7.6.3(react-router@7.6.3(react-dom@19.1.0(react@19.1.0))(react@19.1.0))(typescript@5.8.3))(@types/node@24.0.6)(jiti@2.4.2)(lightningcss@1.30.1)(react-router@7.6.3(react-dom@19.1.0(react@19.1.0))(react@19.1.0))(typescript@5.8.3)(vite@7.0.0(@types/node@24.0.6)(jiti@2.4.2)(lightningcss@1.30.1)))(@react-router/node@7.6.3(react-router@7.6.3(react-dom@19.1.0(react@19.1.0))(react@19.1.0))(typescript@5.8.3))(isbot@5.1.28)(react-dom@19.1.0(react@19.1.0))(react@19.1.0)
       ai:
-        specifier: 5.0.0-beta.1
-        version: 5.0.0-beta.1(zod@3.25.67)
+        specifier: 5.0.0-beta.3
+        version: 5.0.0-beta.3(zod@3.25.67)
       class-variance-authority:
         specifier: ^0.7.1
         version: 0.7.1
@@ -105,20 +105,20 @@ packages:
     peerDependencies:
       zod: ^3.25.49
 
-  '@ai-sdk/gateway@1.0.0-beta.1':
-    resolution: {integrity: sha512-X1kmMztEkEtjq6PqF5/oATw65KTLQ8Z/MTNFH45qDJuJ/ou38UaLOzmFGhtvXyhJ1WWHueXFyQy/adAkEi+TfQ==}
+  '@ai-sdk/gateway@1.0.0-beta.3':
+    resolution: {integrity: sha512-g49gMSkXy94lYvl5LRh438OR/0JCG6ol0jV+iLot7cy5HLltZlGocEuauETBu4b10mDXOd7XIjTEZoQpYFMYLQ==}
     engines: {node: '>=18'}
     peerDependencies:
       zod: ^3.25.49
 
-  '@ai-sdk/google@2.0.0-beta.2':
-    resolution: {integrity: sha512-LOpgWN8OYs+YXvecdoBgCSmdUnJgJMwv4zljbUbfB3aUzQw6Oy+T4BUGGKFKbZNDHppTp6I/vkdWLQCyvJujzQ==}
+  '@ai-sdk/google@2.0.0-beta.3':
+    resolution: {integrity: sha512-9Fef7joSMPmnctjYWlwCuqBxF415DH6HN4/KMki6446d9SUBBeCNUwRiwPSsOzLjpZWdAxr7piWnKrhsxOCJiA==}
     engines: {node: '>=18'}
     peerDependencies:
       zod: ^3.25.49
 
-  '@ai-sdk/openai@2.0.0-beta.1':
-    resolution: {integrity: sha512-Shl2lDoncbylj56hjBQ8ykELNqtOhdUrySSA3y/+vUnFQRYVp8ukj+opaO93P9WIt3TG/rk4qdJlfNBFrfyVBg==}
+  '@ai-sdk/openai@2.0.0-beta.2':
+    resolution: {integrity: sha512-TQ6Bp3KLrZgofk155+jBvhHMmi+/0B7XAlNTn3OByKGfUk7CQB0mTldCcQEqj8Z9CyKYEvmmztcya30bIysCtw==}
     engines: {node: '>=18'}
     peerDependencies:
       zod: ^3.25.49
@@ -129,12 +129,18 @@ packages:
     peerDependencies:
       zod: ^3.25.49
 
+  '@ai-sdk/provider-utils@3.0.0-beta.2':
+    resolution: {integrity: sha512-H4K+4weOVgWqrDDeAbQWoA4U5mN4WrQPHQFdH7ynQYcnhj/pzctU9Q6mGlR5ESMWxaXxazxlOblSITlXo9bahA==}
+    engines: {node: '>=18'}
+    peerDependencies:
+      zod: ^3.25.49
+
   '@ai-sdk/provider@2.0.0-beta.1':
     resolution: {integrity: sha512-Z8SPncMtS3RsoXITmT7NVwrAq6M44dmw0DoUOYJqNNtCu8iMWuxB8Nxsoqpa0uEEy9R1V1ZThJAXTYgjTUxl3w==}
     engines: {node: '>=18'}
 
-  '@ai-sdk/react@2.0.0-beta.1':
-    resolution: {integrity: sha512-Q1PZNMFnre+ubROM38UZlKoCZw/rkCMB6gP7dnFFQMSsUhM4xiCyyhvE4zOWrEf7uV+HnjLLAbcdltrb/31zvw==}
+  '@ai-sdk/react@2.0.0-beta.3':
+    resolution: {integrity: sha512-Ea2hjDAS3eyoihG9LM0hEcb0XX/ACqKwV0hEI0vytRymczlTu/nmso8TrnuQ/QFCBf3RBjpnzwyz7sAECOREiw==}
     engines: {node: '>=18'}
     peerDependencies:
       react: ^18 || ^19 || ^19.0.0-rc
@@ -1045,8 +1051,8 @@ packages:
     resolution: {integrity: sha512-PYAthTa2m2VKxuvSD3DPC/Gy+U+sOA1LAuT8mkmRuvw+NACSaeXEQ+NHcVF7rONl6qcaxV3Uuemwawk+7+SJLw==}
     engines: {node: '>= 0.6'}
 
-  ai@5.0.0-beta.1:
-    resolution: {integrity: sha512-J8yqlEBC/cy6+a8rs+bPukmIPMJn43kxD/TNdm/0tqwBpV2bo5amLkCXbwQ/RQVWnHYP3hPENuQ3cZoToq2eEQ==}
+  ai@5.0.0-beta.3:
+    resolution: {integrity: sha512-D0Dr+AapfMG4uszw+tBj7FdnEfM5JzffWpmJoFXHbUW+MPQwNG+rWFD6UyruY/veyqz9Xzr1U7JMwnXwctXeMg==}
     engines: {node: '>=18'}
     peerDependencies:
       zod: ^3.25.49
@@ -2197,25 +2203,33 @@ snapshots:
       '@ai-sdk/provider-utils': 3.0.0-beta.1(zod@3.25.67)
       zod: 3.25.67
 
-  '@ai-sdk/gateway@1.0.0-beta.1(zod@3.25.67)':
+  '@ai-sdk/gateway@1.0.0-beta.3(zod@3.25.67)':
     dependencies:
       '@ai-sdk/provider': 2.0.0-beta.1
-      '@ai-sdk/provider-utils': 3.0.0-beta.1(zod@3.25.67)
+      '@ai-sdk/provider-utils': 3.0.0-beta.2(zod@3.25.67)
       zod: 3.25.67
 
-  '@ai-sdk/google@2.0.0-beta.2(zod@3.25.67)':
+  '@ai-sdk/google@2.0.0-beta.3(zod@3.25.67)':
     dependencies:
       '@ai-sdk/provider': 2.0.0-beta.1
-      '@ai-sdk/provider-utils': 3.0.0-beta.1(zod@3.25.67)
+      '@ai-sdk/provider-utils': 3.0.0-beta.2(zod@3.25.67)
       zod: 3.25.67
 
-  '@ai-sdk/openai@2.0.0-beta.1(zod@3.25.67)':
+  '@ai-sdk/openai@2.0.0-beta.2(zod@3.25.67)':
     dependencies:
       '@ai-sdk/provider': 2.0.0-beta.1
-      '@ai-sdk/provider-utils': 3.0.0-beta.1(zod@3.25.67)
+      '@ai-sdk/provider-utils': 3.0.0-beta.2(zod@3.25.67)
       zod: 3.25.67
 
   '@ai-sdk/provider-utils@3.0.0-beta.1(zod@3.25.67)':
+    dependencies:
+      '@ai-sdk/provider': 2.0.0-beta.1
+      '@standard-schema/spec': 1.0.0
+      eventsource-parser: 3.0.3
+      zod: 3.25.67
+      zod-to-json-schema: 3.24.6(zod@3.25.67)
+
+  '@ai-sdk/provider-utils@3.0.0-beta.2(zod@3.25.67)':
     dependencies:
       '@ai-sdk/provider': 2.0.0-beta.1
       '@standard-schema/spec': 1.0.0
@@ -2227,10 +2241,10 @@ snapshots:
     dependencies:
       json-schema: 0.4.0
 
-  '@ai-sdk/react@2.0.0-beta.1(react@19.1.0)(zod@3.25.67)':
+  '@ai-sdk/react@2.0.0-beta.3(react@19.1.0)(zod@3.25.67)':
     dependencies:
-      '@ai-sdk/provider-utils': 3.0.0-beta.1(zod@3.25.67)
-      ai: 5.0.0-beta.1(zod@3.25.67)
+      '@ai-sdk/provider-utils': 3.0.0-beta.2(zod@3.25.67)
+      ai: 5.0.0-beta.3(zod@3.25.67)
       react: 19.1.0
       swr: 2.3.3(react@19.1.0)
       throttleit: 2.1.0
@@ -3097,11 +3111,11 @@ snapshots:
       mime-types: 2.1.35
       negotiator: 0.6.3
 
-  ai@5.0.0-beta.1(zod@3.25.67):
+  ai@5.0.0-beta.3(zod@3.25.67):
     dependencies:
-      '@ai-sdk/gateway': 1.0.0-beta.1(zod@3.25.67)
+      '@ai-sdk/gateway': 1.0.0-beta.3(zod@3.25.67)
       '@ai-sdk/provider': 2.0.0-beta.1
-      '@ai-sdk/provider-utils': 3.0.0-beta.1(zod@3.25.67)
+      '@ai-sdk/provider-utils': 3.0.0-beta.2(zod@3.25.67)
       '@opentelemetry/api': 1.9.0
       zod: 3.25.67
 
